@@ -78,7 +78,8 @@ successor of two; and so on.
 Write out `7` in longhand.
 
 ```agda
--- Your code goes here
+seven : ℕ
+seven = suc (suc (suc (suc (suc (suc (suc zero))))))
 ```
 
 You will need to give both a type signature and definition for the
@@ -382,6 +383,26 @@ _ =
     5
   ∎
 ```
+
+```agda
+_ : 2 + 1 ≡ 3
+_ =
+  begin
+    2 + 1
+  ≡⟨⟩    -- is shorthand for
+    (suc zero) + (suc (suc zero))
+  ≡⟨⟩    -- inductive case
+    suc (zero + (suc (suc zero)))
+  ≡⟨⟩    -- base case
+    suc (suc (suc zero))
+  ≡⟨⟩    -- is longhand for
+    3
+  ∎
+```
+```agda
+_ : 2 + 1 ≡ 3
+_ = refl
+```
 The first line matches the inductive case by taking `m = 1` and `n = 3`,
 the second line matches the inductive case by taking `m = 0` and `n = 3`,
 and the third line matches the base case by taking `n = 3`.
@@ -439,7 +460,23 @@ other word for evidence, which we will use interchangeably, is _proof_.
 Compute `3 + 4`, writing out your reasoning as a chain of equations, using the equations for `+`.
 
 ```agda
--- Your code goes here
+_ : 3 + 4 ≡ 7
+_ =
+  begin
+    3 + 4
+  ≡⟨⟩   -- is shorthand for
+    (suc (suc (suc zero))) + (suc (suc (suc (suc zero))))
+  ≡⟨⟩   -- inductive case
+    (suc ((suc (suc zero)) + suc (suc (suc (suc zero)))))
+  ≡⟨⟩   -- inductive case
+    (suc (suc ((suc zero) + suc (suc (suc (suc zero))))))
+  ≡⟨⟩   -- inductive case
+    (suc (suc (suc (zero + suc (suc (suc (suc zero)))))))
+  ≡⟨⟩   -- base case
+    (suc (suc (suc (suc (suc (suc (suc zero)))))))
+  ≡⟨⟩
+    7
+  ∎
 ```
 
 
@@ -488,6 +525,23 @@ _ =
     6
   ∎
 ```
+
+```agda
+_ =
+  begin
+    3 * 2
+  ≡⟨⟩    -- inductive case
+    2 + (2 * 2)
+  ≡⟨⟩    -- inductive case
+    2 + (2 + (1 * 2))
+  ≡⟨⟩    -- inductive case
+    2 + (2 + (2 + (0 * 2)))
+  ≡⟨⟩    -- base case
+    2 + (2 + (2 + 0))
+  ≡⟨⟩    -- simplify
+    6
+  ∎  
+```
 The first line matches the inductive case by taking `m = 1` and `n = 3`,
 the second line matches the inductive case by taking `m = 0` and `n = 3`,
 and the third line matches the base case by taking `n = 3`.
@@ -501,7 +555,20 @@ Compute `3 * 4`, writing out your reasoning as a chain of equations, using the e
 (You do not need to step through the evaluation of `+`.)
 
 ```agda
--- Your code goes here
+_ =
+  begin
+    3 * 4
+  ≡⟨⟩    -- inductive case
+    4 + (2 * 4)
+  ≡⟨⟩    -- inductive case
+    4 + (4 + (1 * 4))
+  ≡⟨⟩    -- inductive case
+    4 + (4 + (4 + (0 * 4)))
+  ≡⟨⟩    -- base case
+    4 + (4 + (4 + 0))
+  ≡⟨⟩    -- simplify
+    12
+  ∎
 ```
 
 
@@ -515,9 +582,56 @@ Define exponentiation, which is given by the following equations:
 Check that `3 ^ 4` is `81`.
 
 ```agda
--- Your code goes here
+_^_ : ℕ → ℕ → ℕ
+n ^ zero = 1
+n ^ (suc m) = n * (n ^ m)
 ```
 
+```agda
+_ =
+  begin
+    3 ^ 4
+  ≡⟨⟩    -- inductive case
+    3 * (3 ^ 3)
+  ≡⟨⟩    -- inductive case
+    3 * (3 * (3 ^ 2))
+  ≡⟨⟩    -- inductive case
+    3 * (3 * (3 * (3 ^ 1)))
+  ≡⟨⟩    -- inductive case
+    3 * (3 * (3 * (3 * (3 ^ 0))))
+  ≡⟨⟩    -- base case
+    3 * (3 * (3 * (3 * 1)))
+  ≡⟨⟩    -- simplify
+    81
+  ∎ 
+```
+
+```agda
+_! : ℕ → ℕ
+zero ! = 1
+(suc m) ! = (m + 1) * (m !)
+```
+
+```agda
+_ =
+  begin
+    5 !
+  ≡⟨⟩    -- inductive case
+    5 * (4 !)
+  ≡⟨⟩    -- inductive case
+    5 * (4 * (3 !))
+  ≡⟨⟩    -- inductive case
+    5 * (4 * (3 * (2 !)))
+  ≡⟨⟩    -- inductive case
+    5 * (4 * (3 * (2 * (1 !))))
+  ≡⟨⟩    -- inductive case
+    5 * (4 * (3 * (2 * (1 * (0 !)))))
+  ≡⟨⟩    -- base case
+    5 * (4 * (3 * (2 * (1 * 1))))
+  ≡⟨⟩    -- simplify
+    120
+  ∎ 
+```
 
 
 ## Monus
@@ -598,7 +712,33 @@ Section [Logical Connectives](/Decidable/#logical-connectives).
 Compute `5 ∸ 3` and `3 ∸ 5`, writing out your reasoning as a chain of equations.
 
 ```agda
--- Your code goes here
+_ =
+  begin
+    5 ∸ 3
+  ≡⟨⟩
+    4 ∸ 2
+  ≡⟨⟩
+    3 ∸ 1
+  ≡⟨⟩
+    2 ∸ 0
+  ≡⟨⟩
+    2
+  ∎
+```
+
+```agda
+_ =
+  begin
+    3 ∸ 5
+  ≡⟨⟩
+    2 ∸ 4
+  ≡⟨⟩
+    1 ∸ 4
+  ≡⟨⟩
+    0 ∸ 2
+  ≡⟨⟩
+    0
+  ∎
 ```
 
 
@@ -937,6 +1077,11 @@ number.  For example, since `1100` encodes twelve, we should have:
 
 Confirm that this gives the correct answer for the bitstrings
 encoding zero through four.
+
+```agda
+example : Bin
+example = ⟨⟩ I O I I
+```
 
 Using the above, define a pair of functions to convert
 between the two representations.

@@ -1083,6 +1083,51 @@ example : Bin
 example = ⟨⟩ I O I I
 ```
 
+```agda
+example1 : Bin
+example1 = ⟨⟩ I O I I I O I O O I
+```
+
+```agda
+invert : Bin → Bin
+invert ⟨⟩ = ⟨⟩
+invert (x O) = (invert x) I
+invert (x I) = (invert x) O
+```
+
+```agda
+_ : invert (⟨⟩ I I O O) ≡ ⟨⟩ O O I I
+_ =
+  begin
+    invert (⟨⟩ I I O O)
+  ≡⟨⟩
+    invert (⟨⟩ I I O) I
+  ≡⟨⟩
+    invert (⟨⟩ I I) I I
+  ≡⟨⟩
+    invert (⟨⟩ I) O I I
+  ≡⟨⟩
+    invert (⟨⟩) O O I I
+  ≡⟨⟩
+    ⟨⟩ O O I I
+  ∎
+```
+
+```agda
+_ : invert (⟨⟩ I I O O) ≡ ⟨⟩ O O I I
+_ = refl
+```
+
+
+
+```agda
+-- This function increments in one a binary number
+inc : Bin → Bin
+inc ⟨⟩ = ⟨⟩ I
+inc (x O) = x I
+inc (x I) = (inc x) O
+```
+
 Using the above, define a pair of functions to convert
 between the two representations.
 
@@ -1094,9 +1139,26 @@ represents a positive natural, and represent zero by `⟨⟩ O`.
 Confirm that these both give the correct answer for zero through four.
 
 ```agda
--- Your code goes here
+to : ℕ → Bin
+to 0 = ⟨⟩ O
+to 1 = ⟨⟩ I
+to (suc n) = inc (to n)
 ```
 
+```agda
+from : Bin → ℕ
+from x = fr x 0
+  where
+    fr : Bin → ℕ → ℕ
+    fr ⟨⟩ carry = 0
+    fr (x O) carry = fr x (carry + 1)
+    fr (x I) carry = (2 ^ carry) + fr x (carry + 1)
+```
+
+```agda
+_ : from (⟨⟩ I I I) ≡ 7
+_ = refl
+```
 
 ## Standard library
 

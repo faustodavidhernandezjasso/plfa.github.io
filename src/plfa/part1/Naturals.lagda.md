@@ -1156,6 +1156,15 @@ from x = fr x 0
 ```
 
 ```agda
+from' : Bin → ℕ
+from' (⟨⟩) = 0
+from' (⟨⟩ O) = 0
+from' (⟨⟩ I) = 1
+from' (x O) = 2 * (from x)
+from' (x I) = suc (2 * (from x))
+```
+
+```agda
 _ : from (⟨⟩ I I I) ≡ 7
 _ = refl
 ```
